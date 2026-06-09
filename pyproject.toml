@@ -1,0 +1,13 @@
+[project]
+name = "manimations"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "manim>=0.20.1",
+    "manim-gearbox>=0.2.4",
+    "manim-slides>=5.6.0",
+    "numpy>=2.4.6",
+    "scipy>=1.17.1",
+]
