@@ -5,10 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "latex>=0.7.0",
     "manim>=0.20.1",
     "manim-gearbox>=0.2.4",
+    "manim-play-timeline>=0.1.1",
     "manim-slides>=5.6.0",
     "numpy>=2.4.6",
     "scipy>=1.17.1",
     "sympy>=1.14.0",
+    "tex>=1.8",
 ]
