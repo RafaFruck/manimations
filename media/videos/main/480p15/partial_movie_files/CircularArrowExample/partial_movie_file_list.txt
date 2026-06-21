@@ -1,0 +1,3 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/rafafruck/manimations/media/videos/main/480p15/partial_movie_files/CircularArrowExample/1584795214_3218494973_223132457.mp4'
+file 'file:/home/rafafruck/manimations/media/videos/main/480p15/partial_movie_files/CircularArrowExample/4072820271_2688965532_2507137117.mp4'
