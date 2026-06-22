@@ -318,3 +318,19 @@ class Gears(Scene):
         }
         play_timeline(self, timeline)
         self.wait()
+
+        self.play(Uncreate(arrow0))
+        self.play(Uncreate(arrow1))
+        self.play(Uncreate(arrow2))
+        self.play(Uncreate(arrow3))
+        self.play(Uncreate(beltFunction))
+        self.play(Uncreate(gear1))
+        self.play(Uncreate(gear2))
+        ThankYou = MathTex("Obrigado", color=BLACK)
+        ThankYou.scale(6)
+        ThankYouColorful = AnimatedBoundary(torqueText, colors=[PURE_RED, PURE_YELLOW, PURE_GREEN, PURE_CYAN, PURE_BLUE, PURE_MAGENTA])
+        self.play(Write(ThankYou), Write(ThankYouColorful))
+        self.wait()
+        self.play(Unwrite(ThankYou), Unwrite(ThankYouColorful))
+        self.wait(10)
+
