@@ -2,6 +2,9 @@ from manim import *
 from manim_gearbox import *
 from manim_play_timeline import play_timeline
 import numpy as np
+from manim import config as gc
+
+gc.max_files_cached = -1
 
 class Gears(Scene):
     def BeltFunction(self, t):
@@ -84,7 +87,7 @@ class Gears(Scene):
         self.play(Create(gear2))
         self.play(Rotate(gear1, gear1.pitch_angle * 5), Rotate(gear2, - gear2.pitch_angle * 5), run_time=2)
         self.play(Rotate(gear1, - gear1.pitch_angle * 5), Rotate(gear2, gear2.pitch_angle * 5), run_time=2)
-        self.wait()
+        self.wait(6)
 
         self.play(gear2.animate.shift(RIGHT * 1.5), gear1.animate.shift(LEFT * 0.5))
         beltFunction = ParametricFunction(self.BeltFunction, t_range= (0, 129), fill_opacity=0, stroke_width=50).set_color(TEAL_C)
@@ -135,20 +138,20 @@ class Gears(Scene):
         w1 = MathTex(r"\vec{\omega}_b", color=GREEN)
         w1.move_to([2.5, 0, 0])
         w1.scale(0.8)
-        self.add(NumberPlane())
+        
         self.play(Rotate(gear1, gear1.pitch_angle * 5, rate_func=rate_functions.ease_in_out_quint), Rotate(gear2, gear2.pitch_angle * 5, rate_func=rate_functions.ease_in_out_quint), Create(arrow4), Create(v4), Create(arrow5), Create(v5), Create(arrow6), Create(v6), Create(arrow7), Create(v7), run_time=2)
         self.play(Uncreate(arrow4), Uncreate(v4), Uncreate(arrow5), Uncreate(v5), Uncreate(arrow6), Uncreate(v6), Uncreate(arrow7), Uncreate(v7))
         self.wait(5)
-        diameter0 = Line([-2, 1.5, 0], [-2, -1.5, 0], color=GOLD)
-        diameter1 = Line([2.5, 1, 0], [2.5, -1, 0], color=GOLD)
-        diaText0 = MathTex("d = 30", color=GOLD)
-        diaText1 = MathTex("d = 20", color=GOLD)
-        diaText0.next_to(diameter0, UP)
-        diaText1.next_to(diameter1, UP)
-        diaText0.scale(1.5)
-        diaText1.scale(1.5)
-        formula0 = MathTex(r" \lvert \vec{\omega}_a  \rvert = \frac{ \lvert \vec{v}  \rvert}{r}", color=GOLD)
-        formula1 = MathTex(r" \lvert \vec{\omega}_b  \rvert = \frac{ \lvert \vec{v}  \rvert}{r}", color=GOLD)
+        radius0 = Line([-2, 1.5, 0], [-2, -0, 0], color=GOLD)
+        radius1 = Line([2.5, 1, 0], [2.5, 0, 0], color=GOLD)
+        radText0 = MathTex(r"r_a", color=GOLD)
+        radText1 = MathTex(r"r_b", color=GOLD)
+        radText0.next_to(radius0, UP)
+        radText1.next_to(radius1, UP)
+        radText0.scale(1.5)
+        radText1.scale(1.5)
+        formula0 = MathTex(r" \lvert \vec{\omega}_a  \rvert = \frac{ \lvert \vec{v}  \rvert}{r_a}", color=GOLD)
+        formula1 = MathTex(r" \lvert \vec{\omega}_b  \rvert = \frac{ \lvert \vec{v}  \rvert}{r_b}", color=GOLD)
         formula = MathTex(r" \lvert \vec{\omega}  \rvert = \frac{ \lvert \vec{v}  \rvert}{r}", color=GOLD)
         formula.move_to([0, 3, 0])
         formula.scale(1.5)
@@ -157,18 +160,12 @@ class Gears(Scene):
         formula1.scale(1.5)
         formula0.move_to([-4, 3, 0])
         formula1.move_to([4, 3, 0])
-        formula2 = MathTex(r" \lvert \vec{\omega}_a  \rvert = \frac{{ \lvert \vec{v}  \rvert}}{15}", color=GOLD)
-        formula3 = MathTex(r" \lvert \vec{\omega}_b  \rvert = \frac{{ \lvert \vec{v}  \rvert}}{10}", color=GOLD)
-        formula4 = MathTex(r" \lvert \vec{\omega}_a  \rvert = \frac{{ \lvert \vec{v}  \rvert}}{d / 2}", color=GOLD)
-        formula5 = MathTex(r" \lvert \vec{\omega}_b  \rvert = \frac{{ \lvert \vec{v}  \rvert}}{d / 2}", color=GOLD)
+        formula2 = MathTex(r" \lvert \vec{\omega}_a  \rvert = \frac{{ \lvert \vec{v}  \rvert}}{r_a}", color=GOLD)
+        formula3 = MathTex(r" \lvert \vec{\omega}_b  \rvert = \frac{{ \lvert \vec{v}  \rvert}}{r_b}", color=GOLD)
         formula2.move_to([-4, 3, 0])
         formula3.move_to([4, 3, 0])
-        formula4.move_to([-4, 3, 0])
-        formula5.move_to([4, 3, 0])
         formula2.scale(1.5)
         formula3.scale(1.5)
-        formula4.scale(1.5)
-        formula5.scale(1.5)
         circs = VGroup()
         torqueText = MathTex("Torque", color=BLACK)
         torqueText.scale(7)
@@ -185,15 +182,15 @@ class Gears(Scene):
             else:
                  circ = Circle(0.5, color=PURPLE_A).move_to(self.BeltFunctionArray(135.5))
             circs.add(circ)
-        powerEq0 = MathTex(r"P = \omega \cdot \tau", color=GOLD).shift([0, 3, 0]).scale(2)
-        powerEq1 = MathTex(r"\omega_a \cdot \tau_a = \omega_b \cdot \tau_b", color=GOLD).shift([0, 3, 0]).scale(2)
-        powerEq2 = MathTex(r"\frac{v}{15} \cdot \tau_a = \frac{v}{10} \cdot \tau_b", color=GOLD).shift([0, 3, 0]).scale(2)
-        powerEq3 = MathTex(r"\frac{\tau_a}{15} = \frac{\tau_b}{10}", color=GOLD).shift([0, 3, 0]).scale(2)
+        powerEq0 = MathTex(r"P = \omega \cdot \tau", color=BLUE).shift([0, 3, 0]).scale(1.8)
+        powerEq1 = MathTex(r"\omega_a \cdot \tau_a = \omega_b \cdot \tau_b", color=BLUE).shift([0, 3, 0]).scale(1.8)
+        powerEq2 = MathTex(r"\frac{v}{r_a} \cdot \tau_a = \frac{v}{r_a} \cdot \tau_b", color=BLUE).shift([0, 3, 0]).scale(1.8)
+        powerEq3 = MathTex(r"\frac{\tau_a}{r_b} = \frac{\tau_b}{r_b}", color=BLUE).shift([0, 3, 0]).scale(1.8)
 
         timeline = {
         0.0: [
-            Rotate(gear1, gear1.pitch_angle * -225, run_time=75),
-            Rotate(gear2, gear2.pitch_angle * -225, run_time=75),
+            Rotate(gear1, gear1.pitch_angle * -300, run_time=120),
+            Rotate(gear2, gear2.pitch_angle * -300, run_time=120),
             Create(arrow0, run_time=1),
             Write(v0, run_time=1),
             Create(arrow1, run_time=1),
@@ -203,104 +200,108 @@ class Gears(Scene):
             Create(arrow3, run_time=1),
             Write(v3, run_time=1),
         ],
-        5.5: [
+        12.0: [
             Write(w0, run_time=2),
             Create(circArrow0, run_time=2),
         ],
-        6.0: [
+        12.5: [
             Write(w1, run_time=2),
             Create(circArrow1, run_time=2),
         ],
-            9.0: [
-            Create(diameter0, run_time=2),
-            Create(diameter1, run_time=2),
-            Write(diaText0, run_time=2),
-            Write(diaText1, run_time=2),
+        28.0: [
+            Create(radius0, run_time=2),
+            Create(radius1, run_time=2),
+            Write(radText0, run_time=2),
+            Write(radText1, run_time=2),
         ],
-        10.0: [
+        38.0: [
             Write(formula, run_time=2)
         ],
-        12.0: [
+        40.0: [
             Transform(fornula, formula0, run_time=1),
             Transform(formula, formula1, run_time=1),
         ],
-        14.0: [
-            Transform(fornula, formula4, run_time=1),
-            Transform(formula, formula5, run_time=1),
-        ],
-        16.0: [
+        43.0: [
             Transform(fornula, formula2, run_time=1),
             Transform(formula, formula3, run_time=1),
-            FadeOut(diameter0, run_time=1),
-            FadeOut(diameter1, run_time=1),
-            Unwrite(diaText0, run_time=1),
-            Unwrite(diaText1, run_time=1),
         ],
-        23.0: [
+        53.0: [
             Unwrite(fornula, run_time=1),
             Unwrite(formula, run_time=1),
         ],
-        27.0: [
+        55.0: [
             SpinInFromNothing(torqueText, angle=8 * PI, run_time=2),
             SpinInFromNothing(torqueColorful, angle=8 * PI, run_time=2),
         ],
-        32.0: [
+        60.0: [
             Unwrite(torqueText, run_time=1),
             Unwrite(torqueColorful, run_time=1),
         ],
-        34.0: [
+        62.0: [
             Write(powerEq0, run_time=2)
         ],
-        39.0: [
+        74.0: [
             Transform(powerEq0, powerEq1, run_time=1),
         ],
-        41.0: [
+        76.0: [
             Transform(powerEq0, powerEq2, run_time=1)
         ],
-        43.0: [
+        80.0: [
             Transform(powerEq0, powerEq3, run_time=1)
         ],
-        47.0: [
-            Unwrite(powerEq0, run_time=1)
+        85.0: [
+            Unwrite(powerEq0, run_time=1),
+            Unwrite(radText0, run_time=1),
+            Unwrite(radText1, run_time=1),
+            Unwrite(v0, run_time=1),
+            Unwrite(v1, run_time=1),
+            Unwrite(v2, run_time=1),
+            Unwrite(v3, run_time=1),
+            Unwrite(w0, run_time=1),
+            Unwrite(w1, run_time=1),
+            Uncreate(radius0, run_time=1),
+            Uncreate(radius1, run_time=1),
+            Uncreate(circArrow0, run_time=1),
+            Uncreate(circArrow1, run_time=1),
         ],
-        56.0: [
+        99.5: [
             Create(circs[4], run_time=0.3),
         ],
-        58.0: [
+        100.5: [
             Create(circs[14], run_time=0.3),
         ],
-        59.0: [
+        101.0: [
             Create(circs[6], run_time=0.3),
         ],
-        60.0: [
+        102.0: [
             Create(circs[17], run_time=0.3),
         ],
-        60.5: [
+        102.5: [
             Create(circs[7], run_time=0.3),
         ],
-        60.9: [
+        102.9: [
             Create(circs[23], run_time=0.3),
             Create(circs[20], run_time=0.3),
         ],
-        61.2: [
+        103.2: [
             Create(circs[24], run_time=0.3),
             Create(circs[21], run_time=0.3),
             Create(circs[3], run_time=0.3),
         ],
-        61.4: [
+        103.4: [
             Create(circs[15], run_time=0.3),
             Create(circs[0], run_time=0.3),
             Create(circs[1], run_time=0.3),
             Create(circs[5], run_time=0.3),
         ],
-        61.5: [
+        103.5: [
             Create(circs[19], run_time=0.3),
             Create(circs[12], run_time=0.3),
             Create(circs[2], run_time=0.3),
             Create(circs[8], run_time=0.3),
             Create(circs[18], run_time=0.3),
         ],
-        61.6: [
+        103.6: [
             Create(circs[9], run_time=0.3),
             Create(circs[10], run_time=0.3),
             Create(circs[11], run_time=0.3),
@@ -308,10 +309,10 @@ class Gears(Scene):
             Create(circs[16], run_time=0.3),
             Create(circs[22], run_time=0.3),
         ],
-        64.4: [
+        106.4: [
             *[ApplyMethod(circ.set_opacity, 0.5, run_time=0.3) for circ in circs]
         ],
-        64.7: [
+        106.7: [
             *[Uncreate(circ, run_time=0.3) for circ in circs]
         ],
         }

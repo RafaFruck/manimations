@@ -42,49 +42,50 @@ class Torque(Scene):
         Nm = Text("Nm").scale(1.5).shift([0, -1.5, 0])
         m = Text("m", color=GOLD).shift([0.4, 0.4, 0]).scale(0.6)
         N = Text("N", color=MAROON).shift([1.5, 1, 0]).scale(0.6)
+        t_target = t.copy().set_value(2 * PI)
         timeline = {
-        1.0: [
+        2.0: [
             Create(obj, run_time=0)
         ],
-        2.0: [
+        4.5: [
             Create(rad, run_time=0)
         ],
-        3.0: [
+        5.5: [
             Create(traj, run_time=0)
         ],
-        5.0: [
+        7.5: [
             Write(force, run_time=1)
         ],
-        7.0: [
+        9.5: [
             Write(slice0, run_time=0)
         ],
-        8.0: [
+        10.5: [
             Write(slice1, run_time=0)
         ],
-        9.0: [
+        11.0: [
             Write(slice2, run_time=0),
             Create(arr0, run_time=0)
         ],
-        10.0: [
+        11.5: [
             Write(slice3, run_time=0)
         ],
-        11.0: [
+        12.0: [
             Write(slice4, run_time=0),
             Create(arr1, run_time=0)
         ],
-        12.0: [
+        13.5: [
             Write(m, run_time=0)
         ],
-        13.0: [
+        15.0: [
             Write(N, run_time=0)
         ],
-        14.0: [
+        16.5: [
             Create(arr2, run_time=0),
             Write(Nm, run_time=0)
         ],
-        15.0: [
-            ApplyMethod(t.animate.increment_value(2 * PI), run_time=2)
+        18.0: [
+            Transform(t, t_target, rate_func=rate_functions.ease_in_quad, run_time=2)
         ],
         }
-        self.play(Create(NumberPlane()))
         play_timeline(self, timeline)
+        self.wait(0.5)
